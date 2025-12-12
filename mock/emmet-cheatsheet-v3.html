@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emmet Cheatsheet | 時短サポートサイト「ジターン」</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e13;
+      --bg-secondary: #12171e;
+      --bg-tertiary: #1a2029;
+      --bg-card: #151b23;
+      --bg-hover: #1e2530;
+      --border-color: #2a3441;
+      --border-light: #3d4a5c;
+      --text-primary: #f0f4f8;
+      --text-secondary: #b8c5d4;
+      --text-muted: #7a8a9e;
+      --accent: #f0c674;
+      --accent-dim: rgba(240, 198, 116, 0.12);
+      --green: #a8d4a2;
+      --blue: #7cb7e8;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --transition: 0.15s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    code, .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ========== Header ========== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 20px;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), #e8a84b);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .logo-main {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text-primary);
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* Search */
+    .search-container {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 38px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0 12px 0 38px;
+      font-size: 13px;
+      color: var(--text-primary);
+      transition: border-color var(--transition);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Header Controls */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .filter-toggle {
+      display: flex;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      padding: 3px;
+      border: 1px solid var(--border-color);
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .filter-btn.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    .filter-btn:hover:not(.active) {
+      color: var(--text-secondary);
+    }
+
+    .reverse-btn {
+      padding: 6px 12px;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .reverse-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+    }
+
+    .reverse-btn.active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tab-switch {
+      display: flex;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      padding: 3px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+      padding: 6px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .tab-btn.active {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--text-secondary);
+    }
+
+    .nav-btn {
+      padding: 6px 12px;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+    }
+
+    /* ========== Layout ========== */
+    .app-container {
+      display: flex;
+      margin-top: 64px;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      top: 64px;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      padding: 16px 0;
+    }
+
+    .sidebar-section {
+      margin-bottom: 4px;
+    }
+
+    .sidebar-title {
+      padding: 10px 18px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all var(--transition);
+      border-left: 2px solid transparent;
+    }
+
+    .sidebar-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .sidebar-item.active {
+      background: var(--bg-hover);
+      color: var(--accent);
+      border-left-color: var(--accent);
+    }
+
+    .sidebar-item-icon {
+      width: 18px;
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 12px 18px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 220px;
+      padding: 24px;
+      padding-right: 100px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .section-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .section-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-tertiary);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Command Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    /* Command Card - シンプル版 */
+    .command-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .command-card:hover {
+      border-color: var(--border-light);
+      background: var(--bg-hover);
+    }
+
+    .command-card.recommended {
+      border-left: 2px solid var(--accent);
+    }
+
+    .card-command {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 50px;
+    }
+
+    .card-output {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-star {
+      margin-left: auto;
+      font-size: 10px;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+
+    /* ========== 右サイドボタン（固定） ========== */
+    .side-buttons {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 50;
+    }
+
+    .side-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .side-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+      border-color: var(--border-light);
+    }
+
+    .side-btn-icon {
+      font-size: 14px;
+    }
+
+    .side-btn.has-items .side-btn-icon {
+      color: var(--accent);
+    }
+
+    /* ========== パネル共通 ========== */
+    .slide-panel {
+      position: fixed;
+      top: 64px;
+      right: 0;
+      width: 380px;
+      height: calc(100vh - 64px);
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border-color);
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      z-index: 80;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide-panel.open {
+      transform: translateX(0);
+    }
+
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .panel-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px;
+      line-height: 1;
+    }
+
+    .panel-close:hover {
+      color: var(--text-primary);
+    }
+
+    .panel-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    /* ライブプレビュー */
+    .preview-input {
+      width: 100%;
+      height: 42px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+    }
+
+    .preview-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .preview-output {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--green);
+      min-height: 180px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .preview-copy {
+      margin-top: 14px;
+      width: 100%;
+      padding: 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .preview-copy:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    /* お気に入り */
+    .fav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .fav-item:hover {
+      background: var(--bg-hover);
+    }
+
+    .fav-cmd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 500;
+      min-width: 50px;
+    }
+
+    .fav-output {
+      font-size: 12px;
+      color: var(--text-muted);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .fav-remove {
+      color: var(--text-muted);
+      font-size: 16px;
+      opacity: 0;
+      transition: opacity var(--transition);
+      padding: 4px;
+    }
+
+    .fav-item:hover .fav-remove {
+      opacity: 1;
+    }
+
+    .fav-remove:hover {
+      color: var(--text-primary);
+    }
+
+    .fav-empty {
+      padding: 50px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* Emmetとは / 免責 */
+    .info-section {
+      margin-bottom: 24px;
+    }
+
+    .info-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .info-section p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    .info-section a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .info-section a:hover {
+      text-decoration: underline;
+    }
+
+    .info-section ul {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      padding-left: 20px;
+    }
+
+    .info-section li {
+      margin-bottom: 6px;
+    }
+
+    /* ========== 詳細モーダル ========== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 500px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.open .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-command {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .modal-btn {
+      padding: 8px 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .modal-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .modal-btn.primary {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .modal-body {
+      padding: 22px;
+    }
+
+    .modal-output {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      color: var(--green);
+      margin-bottom: 18px;
+    }
+
+    .modal-section {
+      margin-bottom: 18px;
+    }
+
+    .modal-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .modal-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .modal-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .modal-examples {
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .modal-example {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-example:last-child {
+      margin-bottom: 0;
+    }
+
+    .modal-example .input {
+      color: var(--text-primary);
+    }
+
+    .modal-example .arrow {
+      color: var(--text-muted);
+    }
+
+    .modal-example .output {
+      color: var(--green);
+    }
+
+    .modal-related {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .modal-related-tag {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .modal-related-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ========== Toast ========== */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg-secondary);
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 300;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* ========== No Results ========== */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .no-results-icon {
+      font-size: 40px;
+      margin-bottom: 14px;
+      opacity: 0.5;
+    }
+
+    .no-results-text {
+      font-size: 14px;
+    }
+
+    /* ========== Footer ========== */
+    .footer {
+      margin-left: 220px;
+      padding: 20px 24px;
+      border-top: 1px solid var(--border-color);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      color: var(--text-primary);
+    }
+
+    /* ========== Responsive ========== */
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .main-content,
+      .footer {
+        margin-left: 0;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        padding: 0 12px;
+        gap: 10px;
+      }
+
+      .logo-sub {
+        display: none;
+      }
+
+      .filter-toggle,
+      .reverse-btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">
+        <span class="logo-main">Emmet Cheatsheet</span>
+        <span class="logo-sub">時短サポートサイト「ジターン」</span>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="コマンドを検索...">
+    </div>
+
+    <div class="header-controls">
+      <div class="filter-toggle">
+        <button class="filter-btn active" data-filter="recommended">★ よく使う</button>
+        <button class="filter-btn" data-filter="all">すべて</button>
+      </div>
+      
+      <button class="reverse-btn" id="reverseBtn">逆引き検索</button>
+      
+      <div class="tab-switch">
+        <button class="tab-btn active" data-tab="html">HTML</button>
+        <button class="tab-btn" data-tab="css">CSS</button>
+      </div>
+
+      <button class="nav-btn" id="aboutBtn">Emmetとは？</button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-item active" data-section="all">
+          <span class="sidebar-item-icon">📋</span>
+          <span>すべて</span>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section" id="htmlCategories">
+        <div class="sidebar-title">HTML</div>
+        <div class="sidebar-item" data-section="html-structure">
+          <span class="sidebar-item-icon">📄</span>
+          <span>構造・セマンティクス</span>
+        </div>
+        <div class="sidebar-item" data-section="html-text">
+          <span class="sidebar-item-icon">📝</span>
+          <span>テキスト・インライン</span>
+        </div>
+        <div class="sidebar-item" data-section="html-list">
+          <span class="sidebar-item-icon">📋</span>
+          <span>リスト要素</span>
+        </div>
+        <div class="sidebar-item" data-section="html-form">
+          <span class="sidebar-item-icon">📮</span>
+          <span>フォーム・入力</span>
+        </div>
+        <div class="sidebar-item" data-section="html-media">
+          <span class="sidebar-item-icon">🖼️</span>
+          <span>メディア・図</span>
+        </div>
+        <div class="sidebar-item" data-section="html-syntax">
+          <span class="sidebar-item-icon">⚙️</span>
+          <span>複数出力構文</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section" id="cssCategories" style="display: none;">
+        <div class="sidebar-title">CSS</div>
+        <div class="sidebar-item" data-section="css-layout">
+          <span class="sidebar-item-icon">📐</span>
+          <span>レイアウト・配置</span>
+        </div>
+        <div class="sidebar-item" data-section="css-spacing">
+          <span class="sidebar-item-icon">↔️</span>
+          <span>余白・サイズ</span>
+        </div>
+        <div class="sidebar-item" data-section="css-text">
+          <span class="sidebar-item-icon">🔤</span>
+          <span>テキスト・文字</span>
+        </div>
+        <div class="sidebar-item" data-section="css-decoration">
+          <span class="sidebar-item-icon">🎨</span>
+          <span>装飾・背景</span>
+        </div>
+        <div class="sidebar-item" data-section="css-flex">
+          <span class="sidebar-item-icon">📊</span>
+          <span>Flex・Grid</span>
+        </div>
+        <div class="sidebar-item" data-section="css-animation">
+          <span class="sidebar-item-icon">✨</span>
+          <span>アニメーション</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="section" id="mainSection">
+        <div class="section-header">
+          <span class="section-title" id="sectionTitle">すべてのコマンド</span>
+          <span class="section-note" id="sectionNote">★ = 制作現場でよく使用</span>
+          <span class="section-count" id="sectionCount">0件</span>
+        </div>
+        <div class="cards-grid" id="cardsGrid"></div>
+        <div class="no-results" id="noResults" style="display: none;">
+          <div class="no-results-icon">🔍</div>
+          <div class="no-results-text">該当するコマンドが見つかりません</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>© 2025 <a href="https://zitaan.com" target="_blank">zitaan.com</a> | 最終更新: 2025年4月</span>
+    <span>Emmetのコマンド確認は VSCode にて行っています</span>
+  </footer>
+
+  <!-- 右サイド固定ボタン -->
+  <div class="side-buttons">
+    <button class="side-btn" id="previewBtn">
+      <span class="side-btn-icon">▶</span>
+      <span>プレビュー</span>
+    </button>
+    <button class="side-btn" id="favBtn">
+      <span class="side-btn-icon">⭐</span>
+      <span>お気に入り</span>
+    </button>
+  </div>
+
+  <!-- ライブプレビューパネル -->
+  <div class="slide-panel" id="previewPanel">
+    <div class="panel-header">
+      <span class="panel-title">ライブプレビュー</span>
+      <button class="panel-close" id="previewClose">×</button>
+    </div>
+    <div class="panel-body">
+      <input type="text" class="preview-input" id="previewInput" placeholder="Emmetを入力... (例: ul>li*3>a)">
+      <div class="preview-output" id="previewOutput">ここに展開結果が表示されます</div>
+      <button class="preview-copy" id="previewCopy">📋 結果をコピー</button>
+    </div>
+  </div>
+
+  <!-- お気に入りパネル -->
+  <div class="slide-panel" id="favPanel">
+    <div class="panel-header">
+      <span class="panel-title">お気に入り</span>
+      <button class="panel-close" id="favClose">×</button>
+    </div>
+    <div class="panel-body" id="favList">
+      <div class="fav-empty">お気に入りはまだありません<br>コマンドをクリック → ⭐ で追加できます</div>
+    </div>
+  </div>
+
+  <!-- Emmetとは？/ 免責パネル -->
+  <div class="slide-panel" id="aboutPanel">
+    <div class="panel-header">
+      <span class="panel-title">Emmetとは？/ サイトについて</span>
+      <button class="panel-close" id="aboutClose">×</button>
+    </div>
+    <div class="panel-body">
+      <div class="info-section">
+        <h3>Emmetとは？</h3>
+        <p>Emmet（エメット）は、HTML や CSS を高速に記述するためのツールキットです。短い省略記法（Abbreviation）を入力して Tab キーを押すだけで、複雑なコードが自動展開されます。</p>
+        <p>例えば <code>ul>li*3>a</code> と入力して展開すると、3つのリンク付きリストアイテムを持つ ul 要素が一瞬で生成されます。</p>
+        <p>Visual Studio Code、WebStorm、Sublime Text など、主要なエディタに標準搭載またはプラグインとして提供されています。</p>
+        <p>公式サイト: <a href="https://emmet.io/" target="_blank">emmet.io</a></p>
+      </div>
+
+      <div class="info-section">
+        <h3>このサイトについて</h3>
+        <p>Emmetのコマンドは数多く存在しますが、このサイトでは制作現場でよく使われるものを中心にご紹介しています。</p>
+        <p>「★ よく使う」フィルターでは、管理人の実務経験に基づいて厳選したコマンドのみを表示します。「すべて」に切り替えると全コマンドを確認できます。</p>
+      </div>
+
+      <div class="info-section">
+        <h3>免責事項</h3>
+        <ul>
+          <li>当サイトに掲載している内容は、正確性・完全性を保証するものではありません。利用者が当サイトの情報を用いて行う一切の行為に関して、当方は一切の責任を負いません。</li>
+          <li>Emmetの仕様変更やバージョン差異により、展開結果が異なる場合がございます。</li>
+          <li>当サイトに掲載されているHTML・CSSコードは自己責任にてご利用ください。</li>
+          <li>当サイトの文章・画像・コードを無断転載・再配布することを禁止します。</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <h3>Emmetについて</h3>
+        <p>本サイトは Emmet（旧 Zen Coding）の紹介・チートシートを目的とした非公式ファンサイトです。Emmet は <a href="https://emmet.io/" target="_blank">emmet.io</a> にて公開されているオープンソースツールであり、開発者 Sergey Chikuyonok 氏によりライセンス提供されています。</p>
+      </div>
+
+      <div class="info-section">
+        <h3>動作確認環境</h3>
+        <p>Emmetのコマンド確認は Visual Studio Code（VSCode）にて行っております。エディタやバージョンによって動作が異なる場合があります。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 詳細モーダル -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-command" id="modalCommand">m</span>
+        <div class="modal-actions">
+          <button class="modal-btn" id="modalFav">☆ お気に入り</button>
+          <button class="modal-btn primary" id="modalCopy">📋 コピー</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-output" id="modalOutput">margin: ;</div>
+        
+        <div class="modal-section">
+          <div class="modal-label">説明</div>
+          <div class="modal-text" id="modalDesc">要素の外側に余白をつけるプロパティです。</div>
+        </div>
+
+        <div class="modal-section" id="modalExamplesSection">
+          <div class="modal-label">使用例</div>
+          <div class="modal-examples" id="modalExamples"></div>
+        </div>
+
+        <div class="modal-section" id="modalRelatedSection">
+          <div class="modal-label">関連コマンド</div>
+          <div class="modal-related" id="modalRelated"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span>✓</span>
+    <span id="toastMsg">コピーしました</span>
+  </div>
+
+  <script>
+    // ========== Data ==========
+    const emmetData = {
+      html: [
+        { cmd: '!', output: '<!DOCTYPE html>...', desc: 'HTML5の基本構造（DOCTYPE宣言、head・body要素、viewport設定など）を一括で展開します。言語属性（lang）は初期状態で en になっているため、日本語サイトの場合は ja に変更してください。', category: 'html-structure', level: '初級', recommended: true, examples: ['! → HTML5テンプレート全体'] },
+        { cmd: 'div', output: '<div></div>', desc: '汎用的なブロックレベルのコンテナ要素です。レイアウトの区切りやグループ化に使用します。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: '.class', output: '<div class=""></div>', desc: 'ドット(.)の後にクラス名を入力すると、そのクラスが付与されたdiv要素が生成されます。', category: 'html-structure', level: '初級', recommended: true, examples: ['.container → <div class="container">', '.card.active → <div class="card active">'] },
+        { cmd: '#id', output: '<div id=""></div>', desc: 'シャープ(#)の後にID名を入力すると、そのIDが付与されたdiv要素が生成されます。', category: 'html-structure', level: '初級', recommended: true, examples: ['#main → <div id="main">'] },
+        { cmd: 'hdr', output: '<header></header>', desc: 'ページ全体やセクションの先頭部分に使われるヘッダー要素です。ロゴやナビゲーションを含むことが多いです。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'nav', output: '<nav></nav>', desc: 'サイト内のナビゲーションリンクをまとめる要素です。メインメニューやパンくずリストなどに使用します。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'mn', output: '<main></main>', desc: 'ページの主な内容を表す領域で、1ページに1つだけ使用します。サイドバーやヘッダー・フッターを除いた本文部分に使います。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'sect', output: '<section></section>', desc: '意味のあるまとまりを持つセクションを定義します。通常、見出し（h1-h6）とセットで使われます。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'art', output: '<article></article>', desc: '独立して意味が通じる記事や投稿に使います。ブログ記事、ニュース記事、コメントなどに適しています。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'aside', output: '<aside></aside>', desc: '補足情報やサイドバーとして使用します。', category: 'html-structure', level: '初級' },
+        { cmd: 'ftr', output: '<footer></footer>', desc: 'ページや記事の最後に配置されるフッターエリアを示します。著作権情報やリンクなどを含みます。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'h1', output: '<h1></h1>', desc: 'ページの主見出しとして使用します。通常、1ページに1つが推奨されます。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'h2', output: '<h2></h2>', desc: 'セクションの見出しとして最もよく使われます。h1の下位の見出しです。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'h3', output: '<h3></h3>', desc: 'h2内の小見出しとして使用します。', category: 'html-structure', level: '初級', recommended: true },
+        { cmd: 'h4', output: '<h4></h4>', desc: 'h3内の小見出しとして使用します。', category: 'html-structure', level: '初級' },
+        { cmd: 'h5', output: '<h5></h5>', desc: 'h4内の小見出しとして使用します。', category: 'html-structure', level: '初級' },
+        { cmd: 'h6', output: '<h6></h6>', desc: '最も下位の見出しです。', category: 'html-structure', level: '初級' },
+        { cmd: 'address', output: '<address></address>', desc: '著者や運営者の連絡先を記載する要素です。', category: 'html-structure', level: '中級' },
+        
+        { cmd: 'a', output: '<a href=""></a>', desc: 'ハイパーリンクを作成するタグです。外部リンクには target="_blank" と rel="noopener" を併用することが推奨されます。', category: 'html-text', level: '初級', recommended: true, examples: ['a:link → <a href="http://">', 'a:mail → <a href="mailto:">'] },
+        { cmd: 'p', output: '<p></p>', desc: '段落を表す要素です。文章のまとまりを示すために使用します。', category: 'html-text', level: '初級', recommended: true },
+        { cmd: 'span', output: '<span></span>', desc: '汎用インライン要素で、テキストの一部を装飾したいときに使います。', category: 'html-text', level: '初級', recommended: true },
+        { cmd: 'str', output: '<strong></strong>', desc: '重要な語句を強調するインライン要素です。視覚的には太字で表示されます。', category: 'html-text', level: '初級', recommended: true },
+        { cmd: 'em', output: '<em></em>', desc: '意味的な強調を表すインライン要素です。視覚的には斜体で表示されます。', category: 'html-text', level: '初級' },
+        { cmd: 'br', output: '<br>', desc: 'テキスト内で改行を行うためのタグです。', category: 'html-text', level: '初級', recommended: true },
+        { cmd: 'hr', output: '<hr>', desc: '水平線を引きます。セクションの区切りなどに使用します。', category: 'html-text', level: '初級' },
+        { cmd: 'blockquote', output: '<blockquote></blockquote>', desc: '引用文を表す要素です。', category: 'html-text', level: '中級' },
+        { cmd: 'pre', output: '<pre></pre>', desc: '整形済みテキストを表示します。コードブロックなどに使用します。', category: 'html-text', level: '中級' },
+        { cmd: 'code', output: '<code></code>', desc: 'コードを表すインライン要素です。', category: 'html-text', level: '中級' },
+        { cmd: 'small', output: '<small></small>', desc: '注釈や細則などの小さなテキストを表します。', category: 'html-text', level: '初級' },
+        { cmd: 'time', output: '<time></time>', desc: '日付や時刻を表す要素です。', category: 'html-text', level: '中級' },
+        
+        { cmd: 'ul', output: '<ul></ul>', desc: '順不同のリスト（箇条書き）を作成します。', category: 'html-list', level: '初級', recommended: true },
+        { cmd: 'ol', output: '<ol></ol>', desc: '番号付きのリストを作成します。', category: 'html-list', level: '初級', recommended: true },
+        { cmd: 'li', output: '<li></li>', desc: 'ul や ol 内のリスト項目を定義します。', category: 'html-list', level: '初級', recommended: true },
+        { cmd: 'dl', output: '<dl></dl>', desc: '定義リストを作成します。用語と説明のペアに使用します。', category: 'html-list', level: '中級' },
+        { cmd: 'dt', output: '<dt></dt>', desc: '定義リスト内の用語を定義します。', category: 'html-list', level: '中級' },
+        { cmd: 'dd', output: '<dd></dd>', desc: '定義リスト内の説明を定義します。', category: 'html-list', level: '中級' },
+        
+        { cmd: 'form:post', output: '<form method="post"></form>', desc: 'POST送信のフォームを生成します。フォームデータをサーバーに送信する際に使用します。', category: 'html-form', level: '中級', recommended: true, examples: ['form:get → method="get"'] },
+        { cmd: 'input:t', output: '<input type="text">', desc: 'テキスト形式の1行入力フィールドです。', category: 'html-form', level: '初級', recommended: true },
+        { cmd: 'input:email', output: '<input type="email">', desc: 'メールアドレス用の入力フィールドです。入力値の形式チェックが自動で行われます。', category: 'html-form', level: '初級', recommended: true },
+        { cmd: 'input:password', output: '<input type="password">', desc: 'パスワード入力用フィールドです。入力値が隠されます。', category: 'html-form', level: '初級' },
+        { cmd: 'input:checkbox', output: '<input type="checkbox">', desc: '複数選択が可能なチェックボックスです。', category: 'html-form', level: '初級', recommended: true },
+        { cmd: 'input:radio', output: '<input type="radio">', desc: '複数選択肢から1つを選ばせるラジオボタンです。', category: 'html-form', level: '初級', recommended: true },
+        { cmd: 'input:tel', output: '<input type="tel">', desc: '電話番号入力用フィールドです。', category: 'html-form', level: '初級' },
+        { cmd: 'input:number', output: '<input type="number">', desc: '数値入力用フィールドです。', category: 'html-form', level: '初級' },
+        { cmd: 'input:date', output: '<input type="date">', desc: '日付入力用フィールドです。', category: 'html-form', level: '初級' },
+        { cmd: 'input:file', output: '<input type="file">', desc: 'ファイル選択用フィールドです。', category: 'html-form', level: '中級' },
+        { cmd: 'input:h', output: '<input type="hidden">', desc: '非表示の隠しフィールドです。', category: 'html-form', level: '中級' },
+        { cmd: 'input:submit', output: '<input type="submit">', desc: 'フォーム送信ボタンです。', category: 'html-form', level: '初級' },
+        { cmd: 'btn:s', output: '<button type="submit"></button>', desc: '送信ボタンを button 要素で記述します。テキストやHTMLを自由に入れられます。', category: 'html-form', level: '初級', recommended: true },
+        { cmd: 'select', output: '<select></select>', desc: 'プルダウン形式のセレクトボックスです。', category: 'html-form', level: '初級', recommended: true },
+        { cmd: 'opt', output: '<option value=""></option>', desc: 'select 内の選択肢を定義します。', category: 'html-form', level: '初級' },
+        { cmd: 'tarea', output: '<textarea></textarea>', desc: '複数行入力用フィールドです。', category: 'html-form', level: '初級', recommended: true },
+        { cmd: 'label', output: '<label for=""></label>', desc: 'フォーム項目の説明ラベルとして使用します。for属性でinputと紐づけます。', category: 'html-form', level: '初級', recommended: true },
+        
+        { cmd: 'img', output: '<img src="" alt="">', desc: '画像を表示します。alt属性は必須で、画像の説明を記述します。loading="lazy" を使うと遅延読み込みで高速化可能です。', category: 'html-media', level: '初級', recommended: true },
+        { cmd: 'img:s', output: '<img srcset="">', desc: '画面サイズ・解像度に応じて最適な画像を読み込みます。', category: 'html-media', level: '中級' },
+        { cmd: 'pic', output: '<picture></picture>', desc: 'source と img を組み合わせてレスポンシブ画像を実現します。', category: 'html-media', level: '中級', recommended: true },
+        { cmd: 'source', output: '<source>', desc: 'picture や video, audio 内でメディアソースを指定します。', category: 'html-media', level: '中級' },
+        { cmd: 'fig', output: '<figure></figure>', desc: '画像＋キャプションをセットでまとめる要素です。figcaption と組み合わせて使います。', category: 'html-media', level: '中級', recommended: true },
+        { cmd: 'figc', output: '<figcaption></figcaption>', desc: 'figure 内でキャプション（説明文）を記述します。', category: 'html-media', level: '中級' },
+        { cmd: 'video', output: '<video src=""></video>', desc: '動画を埋め込みます。', category: 'html-media', level: '中級' },
+        { cmd: 'audio', output: '<audio src=""></audio>', desc: '音声を埋め込みます。', category: 'html-media', level: '中級' },
+        { cmd: 'iframe', output: '<iframe src=""></iframe>', desc: '外部コンテンツを埋め込みます。YouTube動画やGoogleマップなどに使用します。', category: 'html-media', level: '中級' },
+        
+        { cmd: 'table', output: '<table></table>', desc: '表を作成します。', category: 'html-table', level: '初級' },
+        { cmd: 'tr', output: '<tr></tr>', desc: 'テーブルの行を定義します。', category: 'html-table', level: '初級' },
+        { cmd: 'th', output: '<th></th>', desc: 'テーブルのヘッダーセルを定義します。', category: 'html-table', level: '初級' },
+        { cmd: 'td', output: '<td></td>', desc: 'テーブルのデータセルを定義します。', category: 'html-table', level: '初級' },
+        
+        { cmd: '>', output: '親>子', desc: 'Child（子）演算子。親要素の中に子要素をネスト（入れ子）させます。', category: 'html-syntax', level: '初級', recommended: true, examples: ['nav>ul>li → ネスト構造'] },
+        { cmd: '+', output: '兄+弟', desc: 'Sibling（兄弟）演算子。同じ階層に兄弟要素を横並びで展開します。', category: 'html-syntax', level: '初級', recommended: true, examples: ['div+p+p → 同階層に並列'] },
+        { cmd: '*', output: '要素*n', desc: 'Multiplication（繰り返し）演算子。指定した数だけ要素を繰り返します。', category: 'html-syntax', level: '初級', recommended: true, examples: ['ul>li*5 → liが5つ生成'] },
+        { cmd: '$', output: '連番', desc: '繰り返し構文（*）と組み合わせて、クラス名やIDに自動で連番を付与します。', category: 'html-syntax', level: '中級', recommended: true, examples: ['li.item$*3 → item1, item2, item3'] },
+        { cmd: '^', output: '親へ戻る', desc: 'Parent（親へ戻る）演算子。一段上の親要素に戻って新しい要素を展開します。', category: 'html-syntax', level: '中級', examples: ['div>ul>li^p → divの外にpが出る'] },
+        { cmd: '()', output: 'グループ化', desc: '複数の要素をひとつのまとまりとして扱います。複雑な構造を作る際に便利です。', category: 'html-syntax', level: '中級', examples: ['div>(header>nav)+footer'] },
+        { cmd: '{}', output: 'テキスト挿入', desc: '要素内にテキストを挿入します。', category: 'html-syntax', level: '初級', recommended: true, examples: ['a{クリック} → <a>クリック</a>'] },
+        { cmd: '[]', output: '属性追加', desc: '要素に任意の属性を追加します。', category: 'html-syntax', level: '中級', examples: ['a[target=_blank] → target属性追加'] },
+        
+        { cmd: 'link:css', output: '<link rel="stylesheet" href="">', desc: '外部CSSファイルを読み込みます。', category: 'html-resource', level: '初級', recommended: true },
+        { cmd: 'link:favicon', output: '<link rel="icon" href="">', desc: 'ファビコンを指定します。', category: 'html-resource', level: '初級' },
+        { cmd: 'script:src', output: '<script src=""></script>', desc: '外部JavaScriptファイルを読み込みます。', category: 'html-resource', level: '初級', recommended: true },
+        { cmd: 'meta:vp', output: '<meta name="viewport">', desc: 'ビューポートの設定を行います。', category: 'html-resource', level: '中級' },
+      ],
+      css: [
+        { cmd: 'm', output: 'margin: ;', desc: '要素の外側に余白をつけるプロパティです。上下左右のスペースを調整する際に使われます。数値を続けて入力するとpx単位で展開されます。', category: 'css-spacing', level: '初級', recommended: true, examples: ['m10 → margin: 10px;', 'm10-20 → margin: 10px 20px;', 'm-0-auto → margin: 0 auto;', 'mt10 → margin-top: 10px;', 'mr10 → margin-right: 10px;', 'mb10 → margin-bottom: 10px;', 'ml10 → margin-left: 10px;'], related: ['p', 'w', 'h'] },
+        { cmd: 'p', output: 'padding: ;', desc: '内側の余白を指定するプロパティです。コンテンツとボックスの枠との間隔を調整します。', category: 'css-spacing', level: '初級', recommended: true, examples: ['p10 → padding: 10px;', 'pt10 → padding-top: 10px;', 'pb10 → padding-bottom: 10px;'], related: ['m', 'w', 'h'] },
+        { cmd: 'w', output: 'width: ;', desc: '要素の横幅を指定します。', category: 'css-spacing', level: '初級', recommended: true, examples: ['w100 → width: 100px;', 'w100p → width: 100%;'], related: ['h', 'maw', 'miw'] },
+        { cmd: 'h', output: 'height: ;', desc: '要素の縦の高さを指定します。', category: 'css-spacing', level: '初級', recommended: true, examples: ['h50 → height: 50px;', 'h100p → height: 100%;'], related: ['w', 'mah', 'mih'] },
+        { cmd: 'maw', output: 'max-width: ;', desc: '要素の最大横幅を制限するプロパティです。レスポンシブデザインでコンテンツ幅を制御する際によく使われます。', category: 'css-spacing', level: '中級', recommended: true, examples: ['maw800 → max-width: 800px;'] },
+        { cmd: 'mah', output: 'max-height: ;', desc: '要素の最大縦幅を制限するプロパティです。', category: 'css-spacing', level: '中級' },
+        { cmd: 'miw', output: 'min-width: ;', desc: '要素の最小横幅を指定します。コンテンツが極端に小さくなるのを防ぎます。', category: 'css-spacing', level: '中級' },
+        { cmd: 'mih', output: 'min-height: ;', desc: '要素の最小縦幅を指定します。', category: 'css-spacing', level: '中級' },
+        { cmd: 'bxz', output: 'box-sizing: border-box;', desc: 'padding や border を含めて要素のサイズを計算します。レイアウト崩れの防止に便利です。', category: 'css-spacing', level: '中級', recommended: true },
+        { cmd: 'g', output: 'gap: ;', desc: 'FlexやGridレイアウトにおける要素間のスペース（間隔）を指定します。', category: 'css-spacing', level: '初級', recommended: true, examples: ['g10 → gap: 10px;', 'g10-20 → gap: 10px 20px;'] },
+        
+        { cmd: 'pos', output: 'position: relative;', desc: '要素の位置を、元の配置を基準にして相対的にずらしたいときに使います。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'poa', output: 'position: absolute;', desc: '要素を親要素の位置を基準にして、絶対的な座標で配置します。親要素に position: relative; が必要です。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'pof', output: 'position: fixed;', desc: '要素の位置をビューポートに対して固定します。スクロールしても常に同じ位置に表示されます。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'pos:s', output: 'position: sticky;', desc: 'スクロールに応じて固定される要素を作成します。', category: 'css-layout', level: '中級' },
+        { cmd: 't', output: 'top: ;', desc: 'positionプロパティと併用して、要素の上端の位置を指定します。', category: 'css-layout', level: '初級', recommended: true, examples: ['t10 → top: 10px;', 't0 → top: 0;'] },
+        { cmd: 'r', output: 'right: ;', desc: 'positionプロパティと併用して、要素の右端の位置を指定します。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'b', output: 'bottom: ;', desc: 'positionプロパティと併用して、要素の下端の位置を指定します。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'l', output: 'left: ;', desc: 'positionプロパティと併用して、要素の左端の位置を指定します。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'z', output: 'z-index: ;', desc: '要素の重なり順を指定するプロパティです。数値が大きいほど前面に表示されます。', category: 'css-layout', level: '中級', recommended: true, examples: ['z10 → z-index: 10;', 'z-1 → z-index: -1;'] },
+        { cmd: 'db', output: 'display: block;', desc: '要素をブロックレベルで表示します。幅は親要素いっぱいに広がり、改行されます。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'di', output: 'display: inline;', desc: 'インライン要素として表示します。', category: 'css-layout', level: '初級' },
+        { cmd: 'dib', output: 'display: inline-block;', desc: 'インライン要素のように並びつつ、幅・高さを指定できます。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'dn', output: 'display: none;', desc: '要素を非表示にします。DOM上には存在しますが見えません。', category: 'css-layout', level: '初級', recommended: true },
+        { cmd: 'v', output: 'visibility: hidden;', desc: '要素を見えなくしますが、スペースは確保されたままです。', category: 'css-layout', level: '中級' },
+        { cmd: 'ov', output: 'overflow: hidden;', desc: 'はみ出した要素を非表示にします。レイアウト崩れ防止やスクロール制御でよく使われます。', category: 'css-layout', level: '中級', recommended: true, examples: ['ova → overflow: auto;', 'ovs → overflow: scroll;'] },
+        { cmd: 'ovx', output: 'overflow-x: hidden;', desc: '横方向のはみ出しを非表示にします。', category: 'css-layout', level: '中級' },
+        { cmd: 'ovy', output: 'overflow-y: hidden;', desc: '縦方向のはみ出しを非表示にします。', category: 'css-layout', level: '中級' },
+        
+        { cmd: 'fz', output: 'font-size: ;', desc: '文字サイズを指定するプロパティです。', category: 'css-text', level: '初級', recommended: true, examples: ['fz16 → font-size: 16px;', 'fz1.5rem → font-size: 1.5rem;'] },
+        { cmd: 'fw', output: 'font-weight: ;', desc: '文字の太さを指定するプロパティです。400が標準、700が太字です。', category: 'css-text', level: '初級', recommended: true, examples: ['fw700 → font-weight: 700;', 'fwb → font-weight: bold;'] },
+        { cmd: 'ff', output: 'font-family: ;', desc: 'フォントの種類を指定します。', category: 'css-text', level: '初級' },
+        { cmd: 'fs', output: 'font-style: ;', desc: 'フォントのスタイル（斜体など）を指定します。', category: 'css-text', level: '初級' },
+        { cmd: 'lh', output: 'line-height: ;', desc: '行間の高さ（行送り）を調整するプロパティです。読みやすさに重要です。', category: 'css-text', level: '初級', recommended: true, examples: ['lh1.5 → line-height: 1.5;', 'lh24 → line-height: 24px;'] },
+        { cmd: 'lts', output: 'letter-spacing: ;', desc: '文字と文字の間隔（字間）を調整するプロパティです。', category: 'css-text', level: '中級', examples: ['lts1 → letter-spacing: 1px;'] },
+        { cmd: 'ta', output: 'text-align: left;', desc: 'テキストやインライン要素の水平方向の配置を指定します。', category: 'css-text', level: '初級', recommended: true, examples: ['tac → text-align: center;', 'tar → text-align: right;'] },
+        { cmd: 'td', output: 'text-decoration: ;', desc: 'テキストの装飾（下線、取り消し線など）を指定します。', category: 'css-text', level: '初級', examples: ['tdn → text-decoration: none;', 'tdu → text-decoration: underline;'] },
+        { cmd: 'tt', output: 'text-transform: ;', desc: '大文字・小文字の変換を指定します。', category: 'css-text', level: '中級' },
+        { cmd: 'ti', output: 'text-indent: ;', desc: '最初の行の字下げを指定します。', category: 'css-text', level: '中級' },
+        { cmd: 'c', output: 'color: #000;', desc: 'テキストの文字色を指定します。', category: 'css-text', level: '初級', recommended: true, examples: ['c#fff → color: #fff;', 'c:red → color: red;'] },
+        { cmd: 'whs', output: 'white-space: nowrap;', desc: 'テキスト中の空白や改行の扱いを制御します。nowrapで折り返しを防止できます。', category: 'css-text', level: '中級', recommended: true },
+        { cmd: 'wob', output: 'word-break: ;', desc: '単語の途中での改行を制御します。', category: 'css-text', level: '中級' },
+        { cmd: 'tov', output: 'text-overflow: ellipsis;', desc: 'テキストがはみ出した場合に「...」で省略します。', category: 'css-text', level: '中級', recommended: true },
+        { cmd: 'va', output: 'vertical-align: ;', desc: 'インライン要素やテーブルセルの垂直方向の位置を指定します。', category: 'css-text', level: '中級' },
+        
+        { cmd: 'bg', output: 'background: #000;', desc: '背景色・画像・位置・サイズなど、背景に関する設定をまとめて指定できます。', category: 'css-decoration', level: '初級', recommended: true, examples: ['bgc#f00 → background-color: #f00;', 'bgn → background: none;'] },
+        { cmd: 'bgc', output: 'background-color: ;', desc: '背景色を指定します。', category: 'css-decoration', level: '初級', recommended: true },
+        { cmd: 'bgi', output: 'background-image: url();', desc: '背景画像を指定します。', category: 'css-decoration', level: '中級' },
+        { cmd: 'bgp', output: 'background-position: ;', desc: '背景画像の位置を指定します。', category: 'css-decoration', level: '中級' },
+        { cmd: 'bgsz', output: 'background-size: ;', desc: '背景画像のサイズを指定します。', category: 'css-decoration', level: '中級', examples: ['bgsz:cv → background-size: cover;'] },
+        { cmd: 'bgr', output: 'background-repeat: ;', desc: '背景画像の繰り返しを指定します。', category: 'css-decoration', level: '中級' },
+        { cmd: 'bd', output: 'border: 1px solid #000;', desc: '要素の枠線を一括で指定するプロパティです。', category: 'css-decoration', level: '初級', recommended: true, examples: ['bdn → border: none;', 'bdt → border-top: ...;'] },
+        { cmd: 'bdrs', output: 'border-radius: ;', desc: '要素の角を丸くするプロパティです。カードやボタンのデザインに多用されます。', category: 'css-decoration', level: '初級', recommended: true, examples: ['bdrs10 → border-radius: 10px;', 'bdrs50p → border-radius: 50%;'] },
+        { cmd: 'bxsh', output: 'box-shadow: ;', desc: '要素に影をつけて立体感を演出するプロパティです。', category: 'css-decoration', level: '中級', recommended: true },
+        { cmd: 'op', output: 'opacity: ;', desc: '要素全体の透明度を指定します。0が完全に透明、1が完全に不透明です。', category: 'css-decoration', level: '中級', recommended: true, examples: ['op0.5 → opacity: 0.5;'] },
+        { cmd: 'ct', output: 'content: "";', desc: '疑似要素（::before, ::after）に内容を挿入します。', category: 'css-decoration', level: '中級' },
+        
+        { cmd: 'df', output: 'display: flex;', desc: '要素をフレックスボックスで表示し、子要素を柔軟に並べます。現代のレイアウトの基本です。', category: 'css-flex', level: '初級', recommended: true, related: ['jc', 'ai', 'fxd'] },
+        { cmd: 'dg', output: 'display: grid;', desc: 'グリッドレイアウトを有効にします。要素を行と列で整列できます。', category: 'css-flex', level: '初級', recommended: true },
+        { cmd: 'dif', output: 'display: inline-flex;', desc: 'インライン要素のように並びつつ、Flexboxのレイアウト制御を行います。', category: 'css-flex', level: '中級' },
+        { cmd: 'fxd', output: 'flex-direction: row;', desc: 'Flexboxの主軸方向（横並び・縦並び）を指定します。', category: 'css-flex', level: '初級', recommended: true, examples: ['fxdc → flex-direction: column;', 'fxdrr → flex-direction: row-reverse;'] },
+        { cmd: 'fxw', output: 'flex-wrap: nowrap;', desc: 'Flexboxの子要素が収まりきらない場合に折り返すかどうかを制御します。', category: 'css-flex', level: '初級', recommended: true, examples: ['fxww → flex-wrap: wrap;'] },
+        { cmd: 'jc', output: 'justify-content: start;', desc: 'Flexbox や Grid で、主軸（通常は横方向）における子要素の配置方法を指定します。', category: 'css-flex', level: '初級', recommended: true, examples: ['jcc → justify-content: center;', 'jcsb → justify-content: space-between;', 'jcsa → justify-content: space-around;'], related: ['ai', 'df'] },
+        { cmd: 'ai', output: 'align-items: start;', desc: 'Flexbox や Grid の子要素を交差軸（縦方向）でどのように揃えるかを指定します。', category: 'css-flex', level: '初級', recommended: true, examples: ['aic → align-items: center;', 'aifs → align-items: flex-start;', 'aife → align-items: flex-end;'], related: ['jc', 'df'] },
+        { cmd: 'ac', output: 'align-content: ;', desc: '複数行のFlexboxでの行の揃え方を指定します。', category: 'css-flex', level: '中級' },
+        { cmd: 'as', output: 'align-self: ;', desc: '個別のアイテムの垂直方向の揃え方を指定します。', category: 'css-flex', level: '中級' },
+        { cmd: 'plai', output: 'place-items: ;', desc: 'FlexやGridで、縦横両軸の中央揃えを同時に指定できるショートハンドです。', category: 'css-flex', level: '中級', examples: ['plai:c → place-items: center;'] },
+        { cmd: 'fx', output: 'flex: ;', desc: '子要素に対して、伸縮性（grow/shrink）や基準サイズ（basis）をまとめて指定します。', category: 'css-flex', level: '中級', examples: ['fx1 → flex: 1;'] },
+        { cmd: 'ord', output: 'order: ;', desc: 'Flex/Gridアイテムの表示順を制御します。', category: 'css-flex', level: '中級' },
+        { cmd: 'gtc', output: 'grid-template-columns: ;', desc: 'Gridの列幅を指定します。', category: 'css-flex', level: '中級' },
+        { cmd: 'gtr', output: 'grid-template-rows: ;', desc: 'Gridの行の高さを指定します。', category: 'css-flex', level: '中級' },
+        
+        { cmd: 'trs', output: 'transition: ;', desc: '状態の変化を滑らかに見せるアニメーション効果を設定します。hoverなどの演出に使います。', category: 'css-animation', level: '中級', recommended: true, examples: ['trs → transition: all 0.3s;'] },
+        { cmd: 'trf', output: 'transform: ;', desc: '要素の位置、拡大縮小、回転、傾きなどを2D/3Dで変形できます。', category: 'css-animation', level: '中級', recommended: true, examples: ['trfr → transform: rotate();', 'trft → transform: translate();', 'trfs → transform: scale();'] },
+        { cmd: 'anim', output: 'animation: ;', desc: 'CSSアニメーションの名前・時間・タイミングなどをまとめて指定します。', category: 'css-animation', level: '上級' },
+        { cmd: 'animn', output: 'animation-name: ;', desc: 'アニメーションの名前を指定します。', category: 'css-animation', level: '上級' },
+        { cmd: 'animdur', output: 'animation-duration: ;', desc: 'アニメーションの時間を指定します。', category: 'css-animation', level: '上級' },
+        { cmd: 'cup', output: 'cursor: pointer;', desc: 'マウスポインターが指の形に変わるスタイルです。クリック可能な要素に使います。', category: 'css-animation', level: '初級', recommended: true },
+        { cmd: 'cud', output: 'cursor: default;', desc: 'デフォルトのカーソルを表示します。', category: 'css-animation', level: '初級' },
+        { cmd: 'us', output: 'user-select: none;', desc: 'テキストの選択を無効化します。', category: 'css-animation', level: '中級' },
+        { cmd: 'pe', output: 'pointer-events: none;', desc: 'マウス操作を無効化します。', category: 'css-animation', level: '中級' },
+      ]
+    };
+
+    // ========== State ==========
+    let currentTab = 'html';
+    let currentSection = 'all';
+    let currentFilter = 'recommended';
+    let isReverseMode = false;
+    let favorites = JSON.parse(localStorage.getItem('emmet-fav') || '[]');
+    let currentModal = null;
+
+    // ========== DOM ==========
+    const searchInput = document.getElementById('searchInput');
+    const cardsGrid = document.getElementById('cardsGrid');
+    const sectionTitle = document.getElementById('sectionTitle');
+    const sectionCount = document.getElementById('sectionCount');
+    const sectionNote = document.getElementById('sectionNote');
+    const noResults = document.getElementById('noResults');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    const previewPanel = document.getElementById('previewPanel');
+    const favPanel = document.getElementById('favPanel');
+    const aboutPanel = document.getElementById('aboutPanel');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    // ========== Functions ==========
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+      showToast('コピーしました: ' + text);
+    }
+
+    function renderCards(data) {
+      if (data.length === 0) {
+        cardsGrid.innerHTML = '';
+        noResults.style.display = 'block';
+        sectionCount.textContent = '0件';
+        return;
+      }
+
+      noResults.style.display = 'none';
+      sectionCount.textContent = data.length + '件';
+
+      cardsGrid.innerHTML = data.map(item => `
+        <div class="command-card ${item.recommended ? 'recommended' : ''}" data-cmd="${item.cmd}">
+          <span class="card-command">${escapeHtml(item.cmd)}</span>
+          <span class="card-output">${escapeHtml(item.output)}</span>
+          ${item.recommended ? '<span class="card-star">★</span>' : ''}
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.command-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const cmd = card.dataset.cmd;
+          const item = emmetData[currentTab].find(i => i.cmd === cmd);
+          if (item) openModal(item);
+        });
+      });
+    }
+
+    function filterData() {
+      let data = emmetData[currentTab];
+      const query = searchInput.value.toLowerCase().trim();
+
+      // よく使う / すべて フィルタ
+      if (currentFilter === 'recommended' && !query) {
+        data = data.filter(item => item.recommended);
+      }
+
+      // セクションフィルタ
+      if (currentSection !== 'all') {
+        data = data.filter(item => item.category === currentSection);
+      }
+
+      // 検索フィルタ
+      if (query) {
+        if (isReverseMode) {
+          data = data.filter(item => 
+            item.desc.toLowerCase().includes(query) ||
+            item.output.toLowerCase().includes(query)
+          );
+        } else {
+          data = data.filter(item =>
+            item.cmd.toLowerCase().includes(query) ||
+            item.output.toLowerCase().includes(query) ||
+            item.desc.toLowerCase().includes(query)
+          );
+        }
+      }
+
+      // 注釈の表示切替
+      if (currentFilter === 'recommended' && !query) {
+        sectionNote.style.display = 'inline';
+      } else {
+        sectionNote.style.display = 'none';
+      }
+
+      renderCards(data);
+    }
+
+    function openModal(item) {
+      currentModal = item;
+      document.getElementById('modalCommand').textContent = item.cmd;
+      document.getElementById('modalOutput').textContent = item.output;
+      document.getElementById('modalDesc').textContent = item.desc;
+
+      const isFav = favorites.some(f => f.cmd === item.cmd);
+      document.getElementById('modalFav').textContent = isFav ? '★ お気に入り済' : '☆ お気に入り';
+
+      const exSection = document.getElementById('modalExamplesSection');
+      const exContainer = document.getElementById('modalExamples');
+      if (item.examples && item.examples.length > 0) {
+        exSection.style.display = 'block';
+        exContainer.innerHTML = item.examples.map(ex => {
+          const parts = ex.split(' → ');
+          return `<div class="modal-example"><span class="input">${escapeHtml(parts[0])}</span><span class="arrow">→</span><span class="output">${escapeHtml(parts[1] || '')}</span></div>`;
+        }).join('');
+      } else {
+        exSection.style.display = 'none';
+      }
+
+      const relSection = document.getElementById('modalRelatedSection');
+      const relContainer = document.getElementById('modalRelated');
+      if (item.related && item.related.length > 0) {
+        relSection.style.display = 'block';
+        relContainer.innerHTML = item.related.map(r => 
+          `<span class="modal-related-tag" data-cmd="${r}">${r}</span>`
+        ).join('');
+        
+        relContainer.querySelectorAll('.modal-related-tag').forEach(tag => {
+          tag.addEventListener('click', () => {
+            const cmd = tag.dataset.cmd;
+            const relItem = emmetData[currentTab].find(i => i.cmd === cmd);
+            if (relItem) openModal(relItem);
+          });
+        });
+      } else {
+        relSection.style.display = 'none';
+      }
+
+      modalOverlay.classList.add('open');
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove('open');
+      currentModal = null;
+    }
+
+    function toggleFavorite(item) {
+      const idx = favorites.findIndex(f => f.cmd === item.cmd);
+      if (idx > -1) {
+        favorites.splice(idx, 1);
+        showToast('お気に入りから削除しました');
+      } else {
+        favorites.unshift({ cmd: item.cmd, output: item.output, type: currentTab });
+        showToast('お気に入りに追加しました');
+      }
+      localStorage.setItem('emmet-fav', JSON.stringify(favorites));
+      renderFavorites();
+      
+      const isFav = favorites.some(f => f.cmd === item.cmd);
+      document.getElementById('modalFav').textContent = isFav ? '★ お気に入り済' : '☆ お気に入り';
+      document.getElementById('favBtn').classList.toggle('has-items', favorites.length > 0);
+    }
+
+    function renderFavorites() {
+      const container = document.getElementById('favList');
+      if (favorites.length === 0) {
+        container.innerHTML = '<div class="fav-empty">お気に入りはまだありません<br>コマンドをクリック → ⭐ で追加できます</div>';
+        return;
+      }
+
+      container.innerHTML = favorites.map(f => `
+        <div class="fav-item" data-cmd="${f.cmd}" data-type="${f.type}">
+          <span class="fav-cmd">${escapeHtml(f.cmd)}</span>
+          <span class="fav-output">${escapeHtml(f.output)}</span>
+          <span class="fav-remove" data-cmd="${f.cmd}">✕</span>
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.fav-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.classList.contains('fav-remove')) {
+            const cmd = e.target.dataset.cmd;
+            favorites = favorites.filter(f => f.cmd !== cmd);
+            localStorage.setItem('emmet-fav', JSON.stringify(favorites));
+            renderFavorites();
+            document.getElementById('favBtn').classList.toggle('has-items', favorites.length > 0);
+            return;
+          }
+          
+          const cmd = item.dataset.cmd;
+          const type = item.dataset.type;
+          const data = emmetData[type].find(i => i.cmd === cmd);
+          if (data) {
+            if (type !== currentTab) {
+              currentTab = type;
+              document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === type));
+              document.getElementById('htmlCategories').style.display = type === 'html' ? 'block' : 'none';
+              document.getElementById('cssCategories').style.display = type === 'css' ? 'block' : 'none';
+            }
+            openModal(data);
+          }
+        });
+      });
+    }
+
+    function expandEmmetSimple(abbr) {
+      if (!abbr) return 'ここに展開結果が表示されます';
+      
+      let result = abbr;
+      
+      const match = abbr.match(/^(\w+)>(\w+)\*(\d+)(?:>(\w+))?$/);
+      if (match) {
+        const [, parent, child, count, grandChild] = match;
+        let inner = '';
+        for (let i = 0; i < parseInt(count); i++) {
+          if (grandChild) {
+            inner += `  <${child}><${grandChild}></${grandChild}></${child}>\n`;
+          } else {
+            inner += `  <${child}></${child}>\n`;
+          }
+        }
+        result = `<${parent}>\n${inner}</${parent}>`;
+      } else if (/^\w+$/.test(abbr)) {
+        result = `<${abbr}></${abbr}>`;
+      }
+      
+      return result;
+    }
+
+    function closeAllPanels() {
+      previewPanel.classList.remove('open');
+      favPanel.classList.remove('open');
+      aboutPanel.classList.remove('open');
+    }
+
+    // ========== Event Listeners ==========
+
+    // タブ切替
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.dataset.tab;
+        currentSection = 'all';
+        
+        document.getElementById('htmlCategories').style.display = currentTab === 'html' ? 'block' : 'none';
+        document.getElementById('cssCategories').style.display = currentTab === 'css' ? 'block' : 'none';
+        
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        document.querySelector('[data-section="all"]').classList.add('active');
+        
+        sectionTitle.textContent = 'すべてのコマンド';
+        searchInput.value = '';
+        filterData();
+      });
+    });
+
+    // よく使う / すべて 切替
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        filterData();
+      });
+    });
+
+    // 検索
+    searchInput.addEventListener('input', filterData);
+
+    // 逆引き
+    document.getElementById('reverseBtn').addEventListener('click', () => {
+      isReverseMode = !isReverseMode;
+      document.getElementById('reverseBtn').classList.toggle('active', isReverseMode);
+      searchInput.placeholder = isReverseMode ? 'やりたいことを入力... (例: 中央揃え)' : 'コマンドを検索...';
+      filterData();
+    });
+
+    // サイドバー
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        currentSection = item.dataset.section;
+        
+        const titles = {
+          'all': 'すべてのコマンド',
+          'html-structure': '構造・セマンティクス',
+          'html-text': 'テキスト・インライン',
+          'html-list': 'リスト要素',
+          'html-form': 'フォーム・入力',
+          'html-media': 'メディア・図',
+          'html-syntax': '複数出力構文',
+          'html-resource': 'リソース・メタ',
+          'css-layout': 'レイアウト・配置',
+          'css-spacing': '余白・サイズ',
+          'css-text': 'テキスト・文字',
+          'css-decoration': '装飾・背景',
+          'css-flex': 'Flex・Grid',
+          'css-animation': 'アニメーション・操作',
+        };
+        sectionTitle.textContent = titles[currentSection] || currentSection;
+        filterData();
+      });
+    });
+
+    // 右サイドボタン
+    document.getElementById('previewBtn').addEventListener('click', () => {
+      const isOpen = previewPanel.classList.contains('open');
+      closeAllPanels();
+      if (!isOpen) previewPanel.classList.add('open');
+    });
+
+    document.getElementById('favBtn').addEventListener('click', () => {
+      const isOpen = favPanel.classList.contains('open');
+      closeAllPanels();
+      if (!isOpen) {
+        favPanel.classList.add('open');
+        renderFavorites();
+      }
+    });
+
+    document.getElementById('aboutBtn').addEventListener('click', () => {
+      const isOpen = aboutPanel.classList.contains('open');
+      closeAllPanels();
+      if (!isOpen) aboutPanel.classList.add('open');
+    });
+
+    document.getElementById('previewClose').addEventListener('click', () => previewPanel.classList.remove('open'));
+    document.getElementById('favClose').addEventListener('click', () => favPanel.classList.remove('open'));
+    document.getElementById('aboutClose').addEventListener('click', () => aboutPanel.classList.remove('open'));
+
+    // ライブプレビュー
+    document.getElementById('previewInput').addEventListener('input', (e) => {
+      document.getElementById('previewOutput').textContent = expandEmmetSimple(e.target.value);
+    });
+
+    document.getElementById('previewCopy').addEventListener('click', () => {
+      const output = document.getElementById('previewOutput').textContent;
+      if (output && output !== 'ここに展開結果が表示されます') {
+        copyToClipboard(output);
+      }
+    });
+
+    // モーダル
+    document.getElementById('modalCopy').addEventListener('click', () => {
+      if (currentModal) copyToClipboard(currentModal.cmd);
+    });
+
+    document.getElementById('modalFav').addEventListener('click', () => {
+      if (currentModal) toggleFavorite(currentModal);
+    });
+
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeAllPanels();
+      }
+    });
+
+    // ========== Init ==========
+    filterData();
+    document.getElementById('favBtn').classList.toggle('has-items', favorites.length > 0);
+  </script>
+</body>
+</html>
