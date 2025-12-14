@@ -97,6 +97,13 @@ export default async function RootLayout(props: {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Google AdSense */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4827162128298417"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
       </head>
       <body id="top">
         <LocaleProvider lang={lang}>

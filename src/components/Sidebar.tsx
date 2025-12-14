@@ -24,6 +24,15 @@ export default function Sidebar({
 }: SidebarProps) {
   // const categories = currentTab === 'html' ? htmlCategories : cssCategories;
 
+  React.useEffect(() => {
+    try {
+      // @ts-ignore
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error('AdSense error', e);
+    }
+  }, []);
+
 
   return (
     <aside className="sidebar">
@@ -58,6 +67,18 @@ export default function Sidebar({
           </div>
         ))}
       </div>
+
+      {/* AdSense */}
+      <div style={{ marginTop: '2rem' }}>
+        {/* zitaan */}
+        <ins className="adsbygoogle"
+             style={{ display: 'block' }}
+             data-ad-client="ca-pub-4827162128298417"
+             data-ad-slot="6698292719"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
     </aside>
   );
 }
+
