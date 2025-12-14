@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "../globals.css";
 import { LocaleProvider } from "@/contexts/LocaleContext";
-import { Locale } from "@/i18n/config";
+import { Locale, isValidLocale, defaultLocale } from "@/i18n/config";
 
 import { uiTranslations } from "@/i18n/ui";
 import { locales } from "@/i18n/config";
 
-export async function generateMetadata(props: { params: Promise<{ lang: Locale }> }) {
+export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
   const params = await props.params;
-  const { lang } = params;
-  const t = uiTranslations[lang] || uiTranslations.ja; // Fallback to ja
+  const lang = isValidLocale(params.lang) ? params.lang : defaultLocale;
+  const t = uiTranslations[lang];
 
   const alternatives = locales.reduce((acc, locale) => {
     acc[locale] = `https://emmet.zitaan.com/${locale}`;
@@ -53,10 +53,10 @@ export async function generateMetadata(props: { params: Promise<{ lang: Locale }
 
 export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: Promise<{ lang: Locale }>;
+  params: Promise<{ lang: string }>;
 }) {
   const params = await props.params;
-  const { lang } = params;
+  const lang = isValidLocale(params.lang) ? params.lang : defaultLocale;
   const { children } = props;
   const jsonLd = {
     "@context": "https://schema.org",
@@ -80,7 +80,7 @@ export default async function RootLayout(props: {
   };
 
   return (
-    <html lang={params.lang}>
+    <html lang={lang}>
       <head>
         <link rel="canonical" href="https://emmet.zitaan.com" />
         {/* Google Analytics */}
@@ -99,7 +99,7 @@ export default async function RootLayout(props: {
         />
       </head>
       <body id="top">
-        <LocaleProvider lang={params.lang}>
+        <LocaleProvider lang={lang}>
           {children}
         </LocaleProvider>
       </body>
