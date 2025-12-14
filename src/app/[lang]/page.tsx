@@ -416,3 +416,15 @@ export default function Home(props: { params: Promise<{ lang: string }> }) {
     </>
   );
 }
+
+export async function generateStaticParams() {
+  return [
+    { lang: 'ja' },
+    { lang: 'en' },
+    { lang: 'es' },
+    { lang: 'pt' },
+    { lang: 'zh-cn' },
+    { lang: 'zh-tw' },
+    { lang: 'ko' },
+  ];
+}
