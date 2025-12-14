@@ -19,7 +19,7 @@ interface FavoriteItem {
   type: 'html' | 'css';
 }
 
-export default function Home() {
+export default function Home(props: { params: Promise<{ lang: string }> }) {
   const { locale } = useLocale();
   const t = uiTranslations[locale];
   const tData = dataTranslations[locale];
