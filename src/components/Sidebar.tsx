@@ -14,6 +14,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({
+  categories,
   currentSection,
   currentTab,
   onSectionClick,
@@ -21,7 +22,8 @@ export default function Sidebar({
   htmlCategories,
   cssCategories,
 }: SidebarProps) {
-  const categories = currentTab === 'html' ? htmlCategories : cssCategories;
+  // const categories = currentTab === 'html' ? htmlCategories : cssCategories;
+
 
   return (
     <aside className="sidebar">

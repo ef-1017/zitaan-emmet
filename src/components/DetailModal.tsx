@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { EmmetItem, emmetData } from '@/data/emmet';
+import { useLocale } from '@/contexts/LocaleContext';
+import { uiTranslations } from '@/i18n/ui';
 
 interface DetailModalProps {
   item: EmmetItem | null;
@@ -135,7 +137,7 @@ function EmmetAnimation({ cmd, output }: { cmd: string; output: string }) {
         className="replay-btn"
         onClick={handleReplay}
       >
-        🔄 リプレイ
+        🔄 Replay
       </button>
     </div>
   );
@@ -150,7 +152,10 @@ export default function DetailModal({
   onRelatedClick,
   isFavorite,
 }: DetailModalProps) {
+  const { locale } = useLocale();
+  const t = uiTranslations[locale];
   const [animationKey, setAnimationKey] = useState(0);
+  const [isCopied, setIsCopied] = useState(false);
 
   // Reset animation when modal opens or item changes
   useEffect(() => {
@@ -160,8 +165,6 @@ export default function DetailModal({
   }, [isOpen, item]);
 
   if (!item) return null;
-
-  const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -191,13 +194,13 @@ export default function DetailModal({
               className="modal-btn"
               onClick={() => onToggleFavorite(item)}
             >
-              {isFavorite(item.cmd) ? '★ お気に入り済' : '☆ お気に入り'}
+              {isFavorite(item.cmd) ? t.modalFavoriteOn : t.modalFavoriteOff}
             </button>
             <button 
               className={`modal-btn primary ${isCopied ? 'copied' : ''}`}
               onClick={() => copyToClipboard(item.cmd)}
             >
-              {isCopied ? '✓ コピーしました！' : '📋 コピー'}
+              {isCopied ? t.modalCopied : t.modalCopy}
             </button>
           </div>
         </div>
@@ -206,13 +209,13 @@ export default function DetailModal({
           <EmmetAnimation key={animationKey} cmd={item.cmd} output={item.output} />
           
           <div className="modal-section">
-            <div className="modal-label">説明</div>
+            <div className="modal-label">{t.modalDesc}</div>
             <div className="modal-text">{item.desc}</div>
           </div>
 
           {item.examples && item.examples.length > 0 && (
             <div className="modal-section">
-              <div className="modal-label">使用例</div>
+              <div className="modal-label">{t.modalExamples}</div>
               <div className="modal-examples">
                 {item.examples.map((ex, idx) => {
                   const parts = ex.split(' → ');
@@ -230,7 +233,7 @@ export default function DetailModal({
 
           {item.related && item.related.length > 0 && (
             <div className="modal-section">
-              <div className="modal-label">関連コマンド</div>
+              <div className="modal-label">{t.modalRelated}</div>
               <div className="modal-related">
                 {item.related.map((r, idx) => (
                   <span 

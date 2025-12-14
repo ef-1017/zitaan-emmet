@@ -1120,3 +1120,49 @@ code, .mono {
 }
 
 
+
+
+/* ========== Language Switcher ========== */
+.lang-switcher {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 4px 8px;
+  gap: 6px;
+  transition: all var(--transition);
+}
+
+.lang-switcher:hover {
+  border-color: var(--accent);
+}
+
+.lang-icon {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.lang-select {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  padding-right: 18px; /* For custom arrow if needed, but native is hidden */
+  outline: none;
+}
+
+.lang-select:hover {
+  color: var(--text-primary);
+}
+
+.lang-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+

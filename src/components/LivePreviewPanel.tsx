@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { htmlData, cssData } from '@/data/emmet';
+import { useLocale } from '@/contexts/LocaleContext';
+import { uiTranslations } from '@/i18n/ui';
 
 interface TryPanelProps {
   isOpen: boolean;
@@ -24,22 +26,30 @@ export default function LivePreviewPanel({
   onClose,
   onCopy,
 }: TryPanelProps) {
+  const { locale } = useLocale();
+  const t = uiTranslations[locale];
+
   const [input, setInput] = useState('');
-  const [output, setOutput] = useState('ここに展開結果が表示されます');
+  const [output, setOutput] = useState(t.tryOutputPlaceholder);
+
+  // Update output reset when locale changes
+  React.useEffect(() => {
+    if (!input) setOutput(t.tryOutputPlaceholder);
+  }, [locale, input, t.tryOutputPlaceholder]);
 
   const expandEmmet = (abbr: string): string => {
-    if (!abbr) return 'ここに展開結果が表示されます';
+    if (!abbr) return t.tryOutputPlaceholder;
     
     // 入力途中の場合は「入力中...」を表示
     if (/[>+*^({\[]$/.test(abbr) || /\.$/.test(abbr) || /#$/.test(abbr)) {
-      return '入力中...';
+      return t.tryTyping;
     }
 
     // Check direct match first
     if (outputMap[abbr]) {
       if (abbr === '!') {
         return `<!DOCTYPE html>
-<html lang="ja">
+<html lang="${locale === 'ja' ? 'ja' : 'en'}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -290,55 +300,38 @@ export default function LivePreviewPanel({
     // スペースが含まれている
     if (/\s/.test(abbr)) {
       const suggestion = abbr.replace(/\s+/g, '');
-      return `❌ スペースは使いません
-
-Emmetはスペースなしで記述します。
-
-修正: ${suggestion}`;
+      return `${t.errorSpace}\n\n${t.errorSpaceDesc}\n\n修正: ${suggestion}`;
     }
 
     // 大文字で始まる
     if (/^[A-Z]/.test(abbr)) {
-      return `❌ 小文字で記述します
-
-HTMLタグは小文字で入力してください。
-
-修正: ${abbr.toLowerCase()}`;
+      return `${t.errorLower}\n\n${t.errorLowerDesc}\n\n修正: ${abbr.toLowerCase()}`;
     }
 
     // セミコロン
     if (/;/.test(abbr)) {
-      return `❌ セミコロンは不要です
-
-CSSのEmmetでは ; は自動で付きます。
-
-修正: ${abbr.replace(/;/g, '')}`;
+      return `${t.errorSemi}\n\n${t.errorSemiDesc}\n\n修正: ${abbr.replace(/;/g, '')}`;
     }
 
     // 数字で始まる
     if (/^\d/.test(abbr)) {
-      return `❌ 数字で始められません
-
-プロパティ名から入力してください。
-例: m10, p20, w100`;
+      return `${t.errorNumber}\n\n${t.errorNumberDesc}\n例: m10, p20, w100`;
     }
 
     // その他
-    return `❓ 認識できませんでした
-
-【HTML】
-  タグ: div, ul, li, p, a
-  クラス: .card, div.container
+    return `${t.errorUnknown}
+\n【HTML】
+  Tag: div, ul, li, p, a
+  Class: .card, div.container
   ID: #main, div#header
-  子: ul>li, nav>ul>li
-  繰り返し: li*5, ul>li*3
-  兄弟: div+p+span
-  連番: li.item$*3
-
-【CSS】
-  数値: m10, p20, w100p
-  複合: m10-20, p10-20-30
-  キーワード: df, jcc, aic`;
+  Child: ul>li, nav>ul>li
+  Repeat: li*5, ul>li*3
+  Sibling: div+p+span
+  Numbering: li.item$*3
+\n【CSS】
+  Value: m10, p20, w100p
+  Multi: m10-20, p10-20-30
+  Keyword: df, jcc, aic`;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -350,14 +343,14 @@ CSSのEmmetでは ; は自動で付きます。
   return (
     <div className={`slide-panel ${isOpen ? 'open' : ''}`}>
       <div className="panel-header">
-        <span className="panel-title">試してみる</span>
+        <span className="panel-title">{t.tryPanelTitle}</span>
         <button className="panel-close" onClick={onClose}>×</button>
       </div>
       <div className="panel-body">
         <input 
           type="text" 
           className="preview-input"
-          placeholder="Emmetを入力... (例: ul>li*3, .card, m10)"
+          placeholder={t.tryInputPlaceholder}
           value={input}
           onChange={handleInputChange}
         />
@@ -366,7 +359,7 @@ CSSのEmmetでは ; は自動で付きます。
           className="preview-copy"
           onClick={() => onCopy(output)}
         >
-          📋 結果をコピー
+          {t.tryCopy}
         </button>
       </div>
     </div>

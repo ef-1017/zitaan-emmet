@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { htmlData, cssData, htmlCategories, cssCategories, EmmetItem } from '@/data/emmet';
+import { useLocale } from '@/contexts/LocaleContext';
+import { uiTranslations } from '@/i18n/ui';
+import { dataTranslations } from '@/i18n/data';
+import { locales, localeNames, Locale } from '@/i18n/config';
 import CommandCard from '@/components/CommandCard';
 import DetailModal from '@/components/DetailModal';
 import Sidebar from '@/components/Sidebar';
@@ -16,6 +20,10 @@ interface FavoriteItem {
 }
 
 export default function Home() {
+  const { locale } = useLocale();
+  const t = uiTranslations[locale];
+  const tData = dataTranslations[locale];
+
   // State
   const [currentTab, setCurrentTab] = useState<'html' | 'css'>('html');
   const [currentSection, setCurrentSection] = useState('all');
@@ -53,12 +61,45 @@ export default function Home() {
   // Copy to clipboard
   const copyToClipboard = useCallback((text: string) => {
     navigator.clipboard.writeText(text);
-    showToast('コピーしました: ' + text);
-  }, [showToast]);
+    showToast(t.toastCopied + ': ' + text);
+  }, [showToast, t]);
+
+  // Translate Data
+  const currentHtmlData = useMemo(() => {
+    if (!tData || locale === 'ja') return htmlData;
+    return htmlData.map(item => ({
+      ...item,
+      desc: tData.html[item.cmd]?.desc || item.desc
+    }));
+  }, [locale, tData]);
+
+  const currentCssData = useMemo(() => {
+    if (!tData || locale === 'ja') return cssData;
+    return cssData.map(item => ({
+      ...item,
+      desc: tData.css[item.cmd]?.desc || item.desc
+    }));
+  }, [locale, tData]);
+
+  const currentHtmlCategories = useMemo(() => {
+    if (!tData || locale === 'ja') return htmlCategories;
+    return htmlCategories.map(cat => ({
+      ...cat,
+      title: tData.categories[cat.id] || cat.title
+    }));
+  }, [locale, tData]);
+
+  const currentCssCategories = useMemo(() => {
+    if (!tData || locale === 'ja') return cssCategories;
+    return cssCategories.map(cat => ({
+      ...cat,
+      title: tData.categories[cat.id] || cat.title
+    }));
+  }, [locale, tData]);
 
   // Get current data
-  const currentData = currentTab === 'html' ? htmlData : cssData;
-  const currentCategories = currentTab === 'html' ? htmlCategories : cssCategories;
+  const currentData = currentTab === 'html' ? currentHtmlData : currentCssData;
+  const currentCategories = currentTab === 'html' ? currentHtmlCategories : currentCssCategories;
 
   // Filter data
   const filteredData = useMemo(() => {
@@ -98,9 +139,9 @@ export default function Home() {
 
   // Get section title
   const getSectionTitle = () => {
-    if (currentSection === 'all') return 'すべてのコマンド';
+    if (currentSection === 'all') return t.sectionTitleAll;
     const cat = currentCategories.find(c => c.id === currentSection);
-    return cat ? cat.title : 'コマンド一覧';
+    return cat ? cat.title : t.sectionTitleDefault;
   };
 
   // Handle tab change
@@ -124,16 +165,16 @@ export default function Home() {
       
       if (idx > -1) {
         newFavorites = prev.filter(f => f.cmd !== item.cmd);
-        showToast('お気に入りから削除しました');
+        showToast(t.toastRemoved);
       } else {
         newFavorites = [{ cmd: item.cmd, output: item.output, type: currentTab }, ...prev];
-        showToast('お気に入りに追加しました');
+        showToast(t.toastAdded);
       }
       
       localStorage.setItem('emmet-fav', JSON.stringify(newFavorites));
       return newFavorites;
     });
-  }, [currentTab, showToast]);
+  }, [currentTab, showToast, t]);
 
   // Check if favorite
   const isFavorite = useCallback((cmd: string) => {
@@ -142,7 +183,7 @@ export default function Home() {
 
   // Handle favorite click from panel
   const handleFavoriteClick = useCallback((cmd: string, type: 'html' | 'css') => {
-    const data = type === 'html' ? htmlData : cssData;
+    const data = type === 'html' ? currentHtmlData : currentCssData;
     const item = data.find(i => i.cmd === cmd);
     if (item) {
       if (type !== currentTab) {
@@ -151,7 +192,7 @@ export default function Home() {
       setSelectedItem(item);
       setIsModalOpen(true);
     }
-  }, [currentTab]);
+  }, [currentTab, currentHtmlData, currentCssData]);
 
   // Handle remove favorite
   const handleRemoveFavorite = useCallback((cmd: string) => {
@@ -160,8 +201,8 @@ export default function Home() {
       localStorage.setItem('emmet-fav', JSON.stringify(newFavorites));
       return newFavorites;
     });
-    showToast('お気に入りから削除しました');
-  }, [showToast]);
+    showToast(t.toastRemoved);
+  }, [showToast, t]);
 
   // Close all panels
   const closeAllPanels = useCallback(() => {
@@ -175,6 +216,18 @@ export default function Home() {
     setSelectedItem(item);
   }, []);
 
+  // Language Switcher Logic
+  const handleLanguageChange = (newLocale: Locale) => {
+    // Path-based routing
+    // Replace the first segment (current locale) with the new locale
+    const pathname = window.location.pathname;
+    const segments = pathname.split('/');
+    // segments[0] is empty, segments[1] is the locale
+    segments[1] = newLocale;
+    const newPath = segments.join('/');
+    window.location.href = newPath + window.location.search;
+  };
+
   return (
     <>
       {/* Header */}
@@ -183,6 +236,7 @@ export default function Home() {
           <div className="logo-icon">⚡</div>
           <div className="logo-text">
             <span className="logo-main">Emmet Cheatsheet</span>
+            {/* <span className="logo-sub">{t.subtitle}</span> */}
           </div>
         </div>
 
@@ -191,25 +245,41 @@ export default function Home() {
           <input
             type="text"
             className="search-input"
-            placeholder="コマンドまたはCSSプロパティで検索（例: m10, 中央寄せ）"
+            placeholder={t.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
         <div className="header-controls">
+          {/* Language Switcher */}
+          <div className="lang-switcher">
+            <span className="lang-icon">🌐</span>
+            <select 
+              className="lang-select" 
+              value={locale} 
+              onChange={(e) => handleLanguageChange(e.target.value as Locale)}
+            >
+              {locales.map(l => (
+                <option key={l} value={l}>
+                  {localeNames[l]}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="filter-toggle">
             <button
               className={`filter-btn ${currentFilter === 'recommended' ? 'active' : ''}`}
               onClick={() => setCurrentFilter('recommended')}
             >
-              ★ よく使う
+              {t.filterRecommended}
             </button>
             <button
               className={`filter-btn ${currentFilter === 'all' ? 'active' : ''}`}
               onClick={() => setCurrentFilter('all')}
             >
-              すべて
+              {t.filterAll}
             </button>
           </div>
 
@@ -220,7 +290,7 @@ export default function Home() {
               setIsAboutPanelOpen(true);
             }}
           >
-            Emmetとは？
+            {t.aboutButton}
           </button>
         </div>
       </header>
@@ -243,8 +313,8 @@ export default function Home() {
           <div className="hero-banner">
             <div className="hero-icon">🎯</div>
             <div className="hero-content">
-              <div className="hero-title">制作現場で本当に使うものだけを厳選</div>
-              <div className="hero-desc">現役のWeb制作者が実務で頻繁に使用するコマンドに絞ってご紹介しています。</div>
+              <div className="hero-title">{t.heroTitle}</div>
+              <div className="hero-desc">{t.heroDesc}</div>
             </div>
           </div>
 
@@ -252,9 +322,9 @@ export default function Home() {
             <div className="section-header">
               <span className="section-title">{getSectionTitle()}</span>
               {currentFilter === 'recommended' && !searchQuery && (
-                <span className="section-note">★ = 制作現場でよく使用</span>
+                <span className="section-note">{t.sectionNote}</span>
               )}
-              <span className="section-count">{filteredData.length}件</span>
+              <span className="section-count">{filteredData.length}{t.countSuffix}</span>
             </div>
             
             {filteredData.length > 0 ? (
@@ -270,7 +340,7 @@ export default function Home() {
             ) : (
               <div className="no-results">
                 <div className="no-results-icon">🔍</div>
-                <div className="no-results-text">該当するコマンドが見つかりません</div>
+                <div className="no-results-text">{t.noResults}</div>
               </div>
             )}
           </div>
@@ -279,8 +349,8 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="footer">
-        <span>© 2025 <a href="https://zitaan.com" target="_blank" rel="noopener noreferrer">zitaan.com</a> | 最終更新: 2025年12月</span>
-        <span>Emmetのコマンド確認は VSCode にて行っています</span>
+        <span>© 2025 <a href="https://zitaan.com" target="_blank" rel="noopener noreferrer">zitaan.com</a> | {t.footerUpdated}</span>
+        <span>{t.footerNote}</span>
       </footer>
 
       {/* Side Buttons */}
@@ -293,7 +363,7 @@ export default function Home() {
           }}
         >
           <span className="side-btn-icon">▶</span>
-          <span>試してみる</span>
+          <span>{t.tryButton}</span>
         </button>
         <button
           className={`side-btn ${favorites.length > 0 ? 'has-items' : ''}`}
@@ -303,7 +373,7 @@ export default function Home() {
           }}
         >
           <span className="side-btn-icon">⭐</span>
-          <span>お気に入り</span>
+          <span>{t.favoritesButton}</span>
         </button>
       </div>
 

@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { useLocale } from '@/contexts/LocaleContext';
+import { uiTranslations } from '@/i18n/ui';
 
 interface FavoriteItem {
   cmd: string;
@@ -23,17 +25,24 @@ export default function FavoritesPanel({
   onFavoriteClick,
   onRemoveFavorite,
 }: FavoritesPanelProps) {
+  const { locale } = useLocale();
+  const t = uiTranslations[locale];
+
   return (
     <div className={`slide-panel ${isOpen ? 'open' : ''}`}>
       <div className="panel-header">
-        <span className="panel-title">お気に入り</span>
+        <span className="panel-title">{t.favoritesPanelTitle}</span>
         <button className="panel-close" onClick={onClose}>×</button>
       </div>
       <div className="panel-body">
         {favorites.length === 0 ? (
           <div className="fav-empty">
-            お気に入りはまだありません<br/>
-            コマンドをクリック → ⭐ で追加できます
+            {t.favoritesEmpty.split('\n').map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < t.favoritesEmpty.split('\n').length - 1 && <br />}
+              </React.Fragment>
+            ))}
           </div>
         ) : (
           favorites.map((fav, idx) => (
