@@ -16,7 +16,7 @@ export async function generateMetadata(props: { params: Promise<{ lang: string }
     acc[locale] = `https://emmet.zitaan.com/${locale}`;
     return acc;
   }, {} as Record<string, string>);
-
+//test
   return {
     title: t.metaTitle,
     description: t.metaDescription,
