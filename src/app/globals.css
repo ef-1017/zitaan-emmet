@@ -1009,6 +1009,61 @@ code, .mono {
   }
 }
 
+@media (max-width: 600px) {
+  .header {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .logo {
+    margin-right: auto;
+  }
+  
+  .search-container {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  .header-controls {
+    gap: 8px;
+  }
+
+  .search-input {
+    height: 40px;
+  }
+
+  .app-container {
+    margin-top: 110px; /* Adjusted for taller header */
+    min-height: calc(100vh - 110px);
+  }
+
+  .sidebar {
+    top: 110px; /* Adjust sidebar top as well */
+  }
+
+  .slide-panel {
+    top: 110px;
+    height: calc(100vh - 110px);
+  }
+
+  /* Footer Mobile */
+  .footer {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    padding: 24px 20px;
+  }
+  
+  .footer span {
+    display: block;
+    line-height: 1.5;
+  }
+}
+
 /* ========== Emmet Animation ========== */
 .emmet-animation {
   margin-bottom: 18px;
